@@ -1,0 +1,22 @@
+---
+- name: Deploy Frontend Container
+  hosts: application
+  become: yes
+
+  tasks:
+
+    - name: Pull latest frontend image
+      docker_image:
+        name: badhrinarayanan26/frontend
+        source: pull
+
+    - name: Stop old frontend container
+      ignore_errors: yes
+      shell: docker rm -f frontend-container
+
+    - name: Run frontend container
+      shell: |
+        docker run -d \
+        --name frontend-container \
+        -p 80:80 \
+        badhrinarayanan26/frontend:latest
